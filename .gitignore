@@ -1,0 +1,6 @@
+source
+vendor
+composer.lock
+.ide_helper
+.DS_STORE
+.dir
