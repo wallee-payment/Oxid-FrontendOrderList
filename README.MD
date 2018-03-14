@@ -2,7 +2,7 @@
 
 ## About
 
-Plugin | cworderliststatus
+Plugin | cwfrontendorderlist
 --- | ---
 Version | 1.0.0
 Vendor / Prefix | cw
