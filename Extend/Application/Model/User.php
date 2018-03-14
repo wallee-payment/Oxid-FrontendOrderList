@@ -30,12 +30,7 @@
 namespace Cw\FrontendOrderList\Extend\Application\Model;
 
 use Cw\FrontendOrderList\Core\FrontendOrderListModule;
-use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Core\DatabaseProvider;
-use OxidEsales\Eshop\Core\Field;
-use OxidEsales\Eshop\Application\Model\Basket;
-use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Core\UtilsObject;
 
 /**
  * Class User.
@@ -56,11 +51,11 @@ class User extends User_parent
             return $query;
         }
         $module = new FrontendOrderListModule();
-        $supported_states = $module->getSupportedTransactionStates();
-        if(!empty($supported_states)) {
-            $supported_states = implode("', '");
-            $supported_states = "('" . DatabaseProvider::getDb()->quote($supported_states) . "')";
-            $query .= ' AND `oxtransstatus` IN ' . $supported_states;
+        $active_states = $module->getActiveTransactionStates();
+        if(!empty($active_states)) {
+            $active_states = implode("', '", $active_states);
+            $active_states = "('" . DatabaseProvider::getDb()->quote($active_states) . "')";
+            $query .= ' AND `oxtransstatus` IN ' . $active_states;
         }
         return $query;
     }

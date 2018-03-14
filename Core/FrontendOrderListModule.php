@@ -30,6 +30,7 @@
 namespace Cw\FrontendOrderList\Core;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use \OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Module\ModuleList;
 use \OxidEsales\Eshop\Core\Registry;
@@ -83,6 +84,20 @@ class FrontendOrderListModule extends Module
     }
 
     /**
+     * Return list of active transaction states which should be displayed in frontend.
+     *
+     * @return array
+     */
+    public function getActiveTransactionStates()
+    {
+        $config = unserialize(html_entity_decode($this->getConfig()->getConfigParam('cwfrontendorderlistDisplayedStates')));
+        if (!is_array($config)) {
+            $config = array();
+        }
+        return $config;
+    }
+
+    /**
      * Module activation script.
      * @return bool
      * @throws \Exception
@@ -100,6 +115,8 @@ class FrontendOrderListModule extends Module
     }
 
     /**
+     * Check if an index exists on oxorder.OXTRANSSTATUS
+     *
      * @return bool
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
@@ -116,16 +133,31 @@ class FrontendOrderListModule extends Module
         return false;
     }
 
+    /**
+     * Adds index idx_cwfrontendorderlist_oxtransstatus on oxorder.OXTRANSSTATUS
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
     protected static function addTransStatusIndex()
     {
-        $sql = "CREATE INDEX 'cwfrontendorderlist_oxtransstatus' ON `oxorder` (`oxtransstatus`)";
+        $sql = "CREATE INDEX idx_cwfrontendorderlist_oxtransstatus ON `oxorder` (`OXTRANSSTATUS`)";
         DatabaseProvider::getDb()->execute($sql);
     }
 
+    /**
+     * Removes index idx_cwfrontendorderlist_oxtransstatus
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     */
     protected static function removeTransStatusIndex()
     {
-        $sql = "DROP INDEX 'cwfrontendorderlist_oxtransstatus' ON `oxorder`";
-        DatabaseProvider::getDb()->execute($sql);
+        try {
+            $sql = "DROP INDEX idx_cwfrontendorderlist_oxtransstatus ON `oxorder`";
+            DatabaseProvider::getDb()->execute($sql);
+        } catch (DatabaseErrorException $e) {
+            // remove unexisting index, presumably wasn't added.
+        }
     }
 
     /**
