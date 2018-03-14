@@ -1,0 +1,27 @@
+{
+	"name" : "cw/frontendorderlist",
+	"description" : "Oxid Plugin to restrict orders displayed in frontend, based on oxtransstatus.",
+	"type" : "oxideshop-module",
+	"keywords" : [
+		"oxid",
+		"modules",
+		"eShop"
+	],
+	"homepage" : "https://www.customweb.com",
+	"license" : [
+		"Apache-2.0"
+	],
+	"extra" : {
+		"oxideshop" : {
+			"target-directory" : "cw/FrontendOrderList"
+		}
+	},
+	"autoload" : {
+		"psr-4" : {
+			"cw\\FrontendOrderList\\" : "../../../source/modules/cw/FrontendOrderList"
+		}
+	},
+	"require-dev" : {
+		"oxid-esales/oxideshop-ce": "^6.0"
+	}
+}
