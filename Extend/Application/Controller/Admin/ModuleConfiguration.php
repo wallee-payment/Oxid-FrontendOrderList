@@ -17,16 +17,12 @@ class ModuleConfiguration extends ModuleConfiguration_parent
     {
         $tpl = $this->_ModuleConfiguration_render_parent();
 
+        $module = new FrontendOrderListModule();
         if (array_key_exists('cwfrontendorderlistDisplayedStates', $this->_aViewData['var_constraints'])) {
-            $module = new FrontendOrderListModule();
             $this->_aViewData['var_constraints']['cwfrontendorderlistDisplayedStates'] = $module->getSupportedTransactionStates();
         }
         if (array_key_exists('cwfrontendorderlistDisplayedStates', $this->_aViewData['confselects'])) {
-            $active_states = unserialize($this->_aViewData['confselects']['cwfrontendorderlistDisplayedStates']);
-            if($active_states == null) {
-                $active_states = array();
-            }
-            $this->_aViewData['confselects']['cwfrontendorderlistDisplayedStates'] = $active_states;
+            $this->_aViewData['confselects']['cwfrontendorderlistDisplayedStates'] = $module->getActiveTransactionStates();
         }
 
         return $tpl;

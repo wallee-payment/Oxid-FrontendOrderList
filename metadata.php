@@ -51,7 +51,7 @@ $aModule = array(
     'email' => 'info@customweb.com',
     'extend' => array(
         \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration::class => Cw\FrontendOrderList\Extend\Application\Controller\Admin\ModuleConfiguration::class,
-        \OxidEsales\Eshop\Application\Model\Order::class => Cw\FrontendOrderList\Extend\Application\Model\User::class
+        \OxidEsales\Eshop\Application\Model\User::class => Cw\FrontendOrderList\Extend\Application\Model\User::class
     ),
     'controllers' => array(),
     'templates' => array(),
