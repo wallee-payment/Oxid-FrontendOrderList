@@ -2,7 +2,7 @@
     <dl>
         <input name="confselects[[{$module_var}]][dummy]" value="dummy" type="hidden">
         <dt>
-            <select multiple class="select" name="confselects[[{$module_var}]][]" [{$readonly}]>
+            <select multiple class="select" style="width:100%" name="confselects[[{$module_var}]][]" [{$readonly}]>
                 [{foreach from=$var_constraints.$module_var item='_field'}]
                 <option value="[{$_field|escape}]" [{if $_field|in_array:$confselects.$module_var}]selected[{/if}]>
                     [{$_field|escape}]
