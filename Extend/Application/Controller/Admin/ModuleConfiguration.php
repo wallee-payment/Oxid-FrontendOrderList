@@ -31,6 +31,9 @@ class ModuleConfiguration extends ModuleConfiguration_parent
     public function _serializeConfVar($sType, $sName, $mValue)
     {
         if ($sName === 'cwfrontendorderlistDisplayedStates') {
+            if(isset($mValue['dummy'])) {
+                unset($mValue['dummy']);
+            }
             $mValue = serialize($mValue);
         }
         return parent::_serializeConfVar($sType, $sName, $mValue);

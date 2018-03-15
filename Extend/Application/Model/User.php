@@ -47,17 +47,19 @@ class User extends User_parent
      */
     protected function updateGetOrdersQuery($query)
     {
-        if($this->isAdmin()){
-            return $query;
+        if(!$this->isAdmin()) {
+            $module = new FrontendOrderListModule();
+            $activeStates = $module->getActiveTransactionStates();
+            if(!empty($activeStates)) {
+                $cleanedStates = "(";
+                foreach($activeStates as $state) {
+                    $cleanedStates .=  "'" . DatabaseProvider::getDb()->quote($state) . "',";
+                }
+                $cleanedStates = rtrim($cleanedStates, ',') . ")";
+                $query .= ' AND `oxtransstatus` IN ' . $cleanedStates;
+            }
         }
-        $module = new FrontendOrderListModule();
-        $active_states = $module->getActiveTransactionStates();
-        if(!empty($active_states)) {
-            $active_states = implode("', '", $active_states);
-            $active_states = "('" . DatabaseProvider::getDb()->quote($active_states) . "')";
-            $query .= ' AND `oxtransstatus` IN ' . $active_states;
-        }
-        return $query;
+        return parent::updateGetOrdersQuery($query);
     }
 
 }
